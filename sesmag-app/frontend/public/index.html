@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SESMag HR Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+<style>
+/* ══════════════════════════════════════════════════════
+   SESMAG HR PORTAL — Theme Variables
+   ══════════════════════════════════════════════════════ */
+:root {
+  --bg:        #0f1117;
+  --bg2:       #181c27;
+  --surface:   #1e2338;
+  --border:    #2a3050;
+  --accent:    #5b8af8;
+  --accent2:   #7c5bf8;
+  --green:     #3ecf8e;
+  --red:       #f87171;
+  --yellow:    #fbbf24;
+  --text:      #e4e8f5;
+  --text2:     #8892b0;
+  --text3:     #5a6480;
+  --radius:    12px;
+  --shadow:    0 4px 24px rgba(0,0,0,0.4);
+  --font:      'Sora', sans-serif;
+  --mono:      'JetBrains Mono', monospace;
+  --fs-base:   1rem;
+  --transition: 0.2s ease;
+}
+
+/* ── Persona Themes ─────────────────────────────────── */
+body.theme-light {
+  --bg:#f4f6fb; --bg2:#eaecf5; --surface:#fff;
+  --border:#d1d5e8; --text:#1a1f35; --text2:#4a5270; --text3:#8892b0;
+  --shadow:0 4px 24px rgba(0,0,0,0.08);
+}
+body.theme-sepia {
+  --bg:#f5f0e8; --bg2:#ede6d8; --surface:#fff8ee;
+  --border:#c8b99a; --text:#3d2b1f; --text2:#7a5c45; --text3:#a08060;
+  --shadow:0 4px 24px rgba(0,0,0,0.1);
+}
+body.theme-high-contrast {
+  --bg:#000; --bg2:#0a0a0a; --surface:#111;
+  --border:#fff; --text:#fff; --text2:#ffff00; --text3:#aaa;
+  --accent:#ffff00; --accent2:#ff6600;
+  --green:#00ff88; --red:#ff4444;
+}
+
+/* ── Font-size persona classes ─────────────────────── */
+body.fs-small  { --fs-base: 0.875rem; }
+body.fs-medium { --fs-base: 1rem;     }
+body.fs-large  { --fs-base: 1.2rem;   }
+body.fs-xlarge { --fs-base: 1.45rem;  }
+
+/* ── Reduce motion ──────────────────────────────────── */
+body.reduce-motion *, body.reduce-motion *::before, body.reduce-motion *::after {
+  animation-duration: 0.001ms !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* ── Reset & Base ───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font);
+  font-size: var(--fs-base);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background var(--transition), color var(--transition);
+  line-height: 1.65;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+button { font-family: var(--font); font-size: var(--fs-base); cursor: pointer; }
+input, select, textarea { font-family: var(--font); font-size: var(--fs-base); }
+
+/* ── Focus styles (WCAG AA) ─────────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ══════════════════════════════════════════════════════
+   LAYOUT
+   ══════════════════════════════════════════════════════ */
+#root { display: flex; flex-direction: column; min-height: 100vh; }
+
+.app-shell { display: flex; flex: 1; }
+.sidebar {
+  width: 260px; min-height: 100vh; background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 0; position: sticky; top: 0; height: 100vh;
+  overflow-y: auto; flex-shrink: 0;
+  transition: width var(--transition);
+}
+.main-content { flex: 1; padding: 2.5rem; max-width: 1100px; }
+
+/* ══════════════════════════════════════════════════════
+   TOPBAR
+   ══════════════════════════════════════════════════════ */
+.topbar {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 100;
+  box-shadow: var(--shadow);
+}
+.topbar-logo {
+  font-weight: 700; font-size: 1.15em;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.topbar-actions { display: flex; align-items: center; gap: 1rem; }
+
+/* ══════════════════════════════════════════════════════
+   SIDEBAR NAV
+   ══════════════════════════════════════════════════════ */
+.sidebar-header {
+  padding: 1.5rem 1.25rem 1rem;
+  font-weight: 700; font-size: 0.7em; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--text3);
+}
+.nav-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  color: var(--text2);
+  background: none; border: none;
+  width: 100%; text-align: left;
+  border-radius: 0;
+  transition: background var(--transition), color var(--transition);
+  font-weight: 500;
+  cursor: pointer;
+}
+.nav-item:hover { background: var(--surface); color: var(--text); }
+.nav-item.active { background: var(--surface); color: var(--accent); border-right: 3px solid var(--accent); }
+.nav-icon { font-size: 1.15em; width: 22px; text-align: center; }
+
+/* ══════════════════════════════════════════════════════
+   CARDS & PANELS
+   ══════════════════════════════════════════════════════ */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.75rem;
+  box-shadow: var(--shadow);
+  animation: fadeUp 0.3s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card-title {
+  font-size: 1.1em; font-weight: 700; margin-bottom: 1.25rem;
+  color: var(--text); display: flex; align-items: center; gap: 0.5rem;
+}
+.page-title {
+  font-size: 1.6em; font-weight: 700; margin-bottom: 1.75rem;
+  color: var(--text);
+}
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 1.25rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1.25rem; }
+
+/* ══════════════════════════════════════════════════════
+   FORM ELEMENTS
+   ══════════════════════════════════════════════════════ */
+.form-group { display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.1rem; }
+.form-label { font-weight: 600; font-size: 0.85em; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
+.form-input {
+  background: var(--bg); border: 1.5px solid var(--border);
+  color: var(--text); border-radius: 8px; padding: 0.7rem 1rem;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  width: 100%;
+}
+.form-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(91,138,248,0.2); outline: none; }
+.form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892b0' stroke-width='2' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.9rem center; padding-right: 2.5rem; }
+
+/* ══════════════════════════════════════════════════════
+   BUTTONS
+   ══════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.65rem 1.4rem; border-radius: 8px; border: none;
+  font-weight: 600; transition: all var(--transition);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff; box-shadow: 0 2px 8px rgba(91,138,248,0.35);
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(91,138,248,0.45); }
+.btn-secondary { background: var(--bg); border: 1.5px solid var(--border); color: var(--text); }
+.btn-secondary:hover { background: var(--surface); }
+.btn-danger { background: var(--red); color: #fff; }
+.btn-danger:hover { opacity: 0.85; }
+.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.875em; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ══════════════════════════════════════════════════════
+   BADGES & STATUS
+   ══════════════════════════════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  padding: 0.2rem 0.65rem; border-radius: 999px;
+  font-size: 0.75em; font-weight: 600;
+}
+.badge-green  { background: rgba(62,207,142,0.15); color: var(--green); }
+.badge-blue   { background: rgba(91,138,248,0.15); color: var(--accent); }
+.badge-purple { background: rgba(124,91,248,0.15); color: var(--accent2); }
+.badge-yellow { background: rgba(251,191,36,0.15);  color: var(--yellow); }
+.badge-red    { background: rgba(248,113,113,0.15); color: var(--red); }
+
+/* ══════════════════════════════════════════════════════
+   TABLE
+   ══════════════════════════════════════════════════════ */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+th { text-align: left; padding: 0.75rem 1rem; border-bottom: 2px solid var(--border); color: var(--text3); font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.06em; }
+td { padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); color: var(--text); }
+tr:hover td { background: var(--bg2); }
+tr:last-child td { border-bottom: none; }
+
+/* ══════════════════════════════════════════════════════
+   AVATAR
+   ══════════════════════════════════════════════════════ */
+.avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #fff; font-size: 0.9em; flex-shrink: 0;
+}
+.avatar-lg { width: 80px; height: 80px; font-size: 1.6em; }
+
+/* ══════════════════════════════════════════════════════
+   LOGIN PAGE
+   ══════════════════════════════════════════════════════ */
+.login-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  background-image: radial-gradient(ellipse at 20% 50%, rgba(91,138,248,0.08) 0%, transparent 60%),
+                    radial-gradient(ellipse at 80% 20%, rgba(124,91,248,0.06) 0%, transparent 60%);
+}
+.login-box {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 20px; padding: 3rem 2.5rem;
+  width: 100%; max-width: 420px;
+  box-shadow: var(--shadow);
+  animation: fadeUp 0.4s ease;
+}
+.login-logo {
+  text-align: center; margin-bottom: 2rem;
+  font-size: 1.5em; font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.login-subtitle { text-align: center; color: var(--text2); margin-bottom: 2rem; font-size: 0.95em; }
+.error-msg { background: rgba(248,113,113,0.12); border: 1px solid var(--red); color: var(--red); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9em; }
+.success-msg { background: rgba(62,207,142,0.12); border: 1px solid var(--green); color: var(--green); padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 1rem; font-size: 0.9em; }
+
+/* ══════════════════════════════════════════════════════
+   STAT CARDS
+   ══════════════════════════════════════════════════════ */
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.4rem 1.6rem;
+  display: flex; align-items: center; gap: 1.2rem;
+  animation: fadeUp 0.3s ease;
+}
+.stat-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5em; flex-shrink: 0;
+}
+.stat-value { font-size: 2em; font-weight: 800; line-height: 1; color: var(--text); }
+.stat-label { font-size: 0.8em; color: var(--text2); margin-top: 0.2rem; font-weight: 500; }
+
+/* ══════════════════════════════════════════════════════
+   ACCESSIBILITY PANEL
+   ══════════════════════════════════════════════════════ */
+.a11y-panel { display: flex; flex-direction: column; gap: 1.25rem; }
+.a11y-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.a11y-label { font-weight: 600; font-size: 0.95em; }
+.a11y-desc { font-size: 0.82em; color: var(--text2); margin-top: 0.15rem; }
+.toggle-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute; inset: 0; background: var(--border); border-radius: 999px;
+  cursor: pointer; transition: background var(--transition);
+}
+.toggle-slider::before {
+  content: ''; position: absolute; width: 20px; height: 20px;
+  left: 3px; bottom: 3px; background: #fff; border-radius: 50%;
+  transition: transform var(--transition);
+}
+.toggle-switch input:checked + .toggle-slider { background: var(--accent); }
+.toggle-switch input:checked + .toggle-slider::before { transform: translateX(22px); }
+
+/* ══════════════════════════════════════════════════════
+   PROFILE PAGE
+   ══════════════════════════════════════════════════════ */
+.profile-header {
+  display: flex; align-items: center; gap: 1.5rem;
+  margin-bottom: 2rem; flex-wrap: wrap;
+}
+.profile-meta { flex: 1; min-width: 200px; }
+.profile-name { font-size: 1.5em; font-weight: 800; }
+.profile-role { color: var(--text2); font-size: 0.95em; margin-top: 0.25rem; }
+.profile-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+/* ══════════════════════════════════════════════════════
+   CHANGES LOG
+   ══════════════════════════════════════════════════════ */
+.change-entry {
+  display: flex; gap: 0.75rem; padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border); font-size: 0.9em;
+}
+.change-field { font-weight: 700; color: var(--accent); }
+.change-arrow { color: var(--text3); }
+.change-time  { font-size: 0.8em; color: var(--text3); margin-top: 0.2rem; }
+
+/* ══════════════════════════════════════════════════════
+   SKIP-NAV (accessibility)
+   ══════════════════════════════════════════════════════ */
+.skip-link {
+  position: absolute; top: -100px; left: 1rem;
+  background: var(--accent); color: #fff;
+  padding: 0.5rem 1rem; border-radius: 6px;
+  z-index: 9999; font-weight: 700;
+}
+.skip-link:focus { top: 1rem; }
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .sidebar { width: 100%; min-height: auto; height: auto; position: static; flex-direction: row; overflow-x: auto; flex-wrap: nowrap; }
+  .app-shell { flex-direction: column; }
+  .main-content { padding: 1.25rem; }
+  .nav-item { padding: 0.65rem 0.9rem; white-space: nowrap; }
+  .sidebar-header { display: none; }
+}
+</style>
+</head>
+<body class="theme-dark fs-medium">
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.4/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useEffect, useCallback, createContext, useContext, useRef } = React;
+
+/* ══════════════════════════════════════════════
+   MOCK DATA  (simulates backend responses)
+   ══════════════════════════════════════════════ */
+const MOCK_USERS = [
+  { id:'u1', username:'admin',       email:'admin@sesmag.org',       role:'admin',    first_name:'System',   last_name:'Admin',    pronouns:null,         department:'Operations',        job_title:'System Administrator',         hire_date:'2020-01-01', bio:'Platform administrator account.',               phone:'+1-555-000-0001', preferred_language:'en', font_size_pref:'medium', color_theme:'dark',          reduce_motion:false, screen_reader_mode:false, tech_comfort_level:5, is_active:true },
+  { id:'u2', username:'patricia_m',  email:'patricia@sesmag.org',    role:'manager',  first_name:'Patricia', last_name:'Martinez', pronouns:'she/her',     department:'Engineering',       job_title:'Engineering Manager',          hire_date:'2021-03-15', bio:'Experienced engineering leader. Loves automating everything.', phone:'+1-555-100-0002', preferred_language:'en', font_size_pref:'medium', color_theme:'dark',          reduce_motion:false, screen_reader_mode:false, tech_comfort_level:5, is_active:true },
+  { id:'u3', username:'dav_persona', email:'dav@sesmag.org',         role:'employee', first_name:'DAV',      last_name:'Persona',  pronouns:'they/them',   department:'Customer Success',  job_title:'Customer Support Specialist',  hire_date:'2023-06-01', bio:'Represents underserved SESMag persona. Prefers clear language and larger text.', phone:'+1-555-200-0003', preferred_language:'en', font_size_pref:'xlarge', color_theme:'high-contrast', reduce_motion:true,  screen_reader_mode:false, tech_comfort_level:2, is_active:true },
+  { id:'u4', username:'tim_c',       email:'tim@sesmag.org',         role:'employee', first_name:'Tim',      last_name:'Chen',     pronouns:'he/him',      department:'Operations',        job_title:'Logistics Coordinator',        hire_date:'2022-09-10', bio:'Primarily mobile user. Values fast load times and simple navigation.', phone:'+1-555-300-0004', preferred_language:'en', font_size_pref:'large',  color_theme:'light',         reduce_motion:false, screen_reader_mode:false, tech_comfort_level:2, is_active:true },
+  { id:'u5', username:'abi_k',       email:'abi@sesmag.org',         role:'employee', first_name:'Abi',      last_name:'Khan',     pronouns:'she/her',     department:'Product & Design',  job_title:'UX Researcher',                hire_date:'2022-01-20', bio:'Screen reader user. Advocates for accessibility and inclusive design.', phone:'+1-555-400-0005', preferred_language:'en', font_size_pref:'medium', color_theme:'high-contrast', reduce_motion:true,  screen_reader_mode:true,  tech_comfort_level:3, is_active:true },
+  { id:'u6', username:'gary_w',      email:'gary@sesmag.org',        role:'employee', first_name:'Gary',     last_name:'Williams', pronouns:'he/him',      department:'Human Resources',   job_title:'HR Generalist',                hire_date:'2019-07-01', bio:'Prefers telephone calls over email. Learning to use digital systems.', phone:'+1-555-500-0006', preferred_language:'en', font_size_pref:'xlarge', color_theme:'light',         reduce_motion:true,  screen_reader_mode:false, tech_comfort_level:1, is_active:true },
+];
+
+const MOCK_CHANGES = [
+  { id:'c1', user_id:'u3', field_name:'font_size_pref', old_value:'large',   new_value:'xlarge',        changed_by_name:'DAV Persona',    changed_at:'2024-06-15T10:30:00Z' },
+  { id:'c2', user_id:'u3', field_name:'color_theme',    old_value:'light',   new_value:'high-contrast', changed_by_name:'DAV Persona',    changed_at:'2024-06-14T09:12:00Z' },
+  { id:'c3', user_id:'u3', field_name:'reduce_motion',  old_value:'false',   new_value:'true',          changed_by_name:'Patricia Martinez', changed_at:'2024-06-10T14:00:00Z' },
+];
+
+/* ══════════════════════════════════════════════
+   AUTH CONTEXT
+   ══════════════════════════════════════════════ */
+const AuthCtx = createContext(null);
+function useAuth() { return useContext(AuthCtx); }
+
+function AuthProvider({ children }) {
+  const [user,  setUser]  = useState(null);
+  const [users, setUsers] = useState(MOCK_USERS);
+
+  const login = useCallback((username, password) => {
+    const found = MOCK_USERS.find(u => u.username === username);
+    if (!found || password !== 'Password1!') throw new Error('Invalid credentials');
+    setUser(found);
+    applyA11yPrefs(found);
+    return found;
+  }, []);
+
+  const logout = useCallback(() => {
+    setUser(null);
+    applyA11yPrefs({ color_theme:'dark', font_size_pref:'medium', reduce_motion:false });
+  }, []);
+
+  const updateUser = useCallback((id, patch) => {
+    setUsers(prev => prev.map(u => u.id === id ? { ...u, ...patch } : u));
+    setUser(prev => prev && prev.id === id ? { ...prev, ...patch } : prev);
+    if (user && user.id === id) applyA11yPrefs({ ...user, ...patch });
+  }, [user]);
+
+  return (
+    <AuthCtx.Provider value={{ user, users, login, logout, updateUser }}>
+      {children}
+    </AuthCtx.Provider>
+  );
+}
+
+function applyA11yPrefs(u) {
+  document.body.className = [
+    `theme-${u.color_theme || 'dark'}`,
+    `fs-${u.font_size_pref || 'medium'}`,
+    u.reduce_motion ? 'reduce-motion' : '',
+  ].filter(Boolean).join(' ');
+}
+
+/* ══════════════════════════════════════════════
+   COMPONENTS
+   ══════════════════════════════════════════════ */
+function Avatar({ user, size='', style={} }) {
+  const initials = `${user.first_name?.[0]||''}${user.last_name?.[0]||''}`.toUpperCase();
+  return <div className={`avatar ${size}`} aria-hidden="true" style={style}>{initials}</div>;
+}
+
+function Badge({ type, children }) {
+  return <span className={`badge badge-${type}`}>{children}</span>;
+}
+
+function RoleBadge({ role }) {
+  const map = { admin:'purple', manager:'blue', employee:'green' };
+  return <Badge type={map[role]||'green'}>{role}</Badge>;
+}
+
+function Toggle({ checked, onChange, id, label }) {
+  return (
+    <label className="toggle-switch" htmlFor={id} title={label}>
+      <input type="checkbox" id={id} checked={checked} onChange={e => onChange(e.target.checked)} aria-label={label} />
+      <span className="toggle-slider" />
+    </label>
+  );
+}
+
+/* ── LOGIN PAGE ─────────────────────────────── */
+function LoginPage() {
+  const { login } = useAuth();
+  const [form, setForm] = useState({ username:'', password:'' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const DEMO_USERS = [
+    { label:'Admin',     un:'admin',       hint:'Full access' },
+    { label:'Manager (Patricia)', un:'patricia_m', hint:'Sees team + changes' },
+    { label:'DAV Persona', un:'dav_persona', hint:'High-contrast, large text' },
+    { label:'Gary (Low Tech)', un:'gary_w',  hint:'XL font, reduced motion' },
+    { label:'Abi (Screen Reader)', un:'abi_k', hint:'Screen reader mode' },
+  ];
+
+  async function handleSubmit(e) {
+    e.preventDefault(); setError(''); setLoading(true);
+    try { login(form.username, form.password); }
+    catch(err) { setError(err.message); setLoading(false); }
+  }
+
+  return (
+    <main className="login-page" id="main-content">
+      <div className="login-box" role="main">
+        <div className="login-logo" role="img" aria-label="SESMag HR Portal logo">
+          ◈ SESMag HR Portal
+        </div>
+        <p className="login-subtitle">Inclusive HR system — designed for every persona</p>
+
+        {error && <div className="error-msg" role="alert">⚠ {error}</div>}
+
+        <form onSubmit={handleSubmit} noValidate>
+          <div className="form-group">
+            <label className="form-label" htmlFor="username">Username</label>
+            <input id="username" type="text" className="form-input" value={form.username}
+              onChange={e => setForm(p=>({...p,username:e.target.value}))}
+              autoComplete="username" required placeholder="Enter username" aria-required="true" />
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor="password">Password</label>
+            <input id="password" type="password" className="form-input" value={form.password}
+              onChange={e => setForm(p=>({...p,password:e.target.value}))}
+              autoComplete="current-password" required placeholder="Enter password" aria-required="true" />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{width:'100%',justifyContent:'center',marginTop:'0.5rem'}} disabled={loading}>
+            {loading ? 'Signing in…' : 'Sign In'}
+          </button>
+        </form>
+
+        <div style={{marginTop:'2rem',borderTop:`1px solid var(--border)`,paddingTop:'1.25rem'}}>
+          <p style={{fontSize:'0.8em',color:'var(--text3)',marginBottom:'0.75rem',fontWeight:600,textTransform:'uppercase',letterSpacing:'0.06em'}}>Demo Accounts (password: Password1!)</p>
+          <div style={{display:'flex',flexDirection:'column',gap:'0.4rem'}}>
+            {DEMO_USERS.map(d=>(
+              <button key={d.un} className="btn btn-secondary btn-sm"
+                onClick={()=>setForm({username:d.un,password:'Password1!'})}
+                style={{justifyContent:'space-between',textAlign:'left'}}>
+                <span>{d.label}</span>
+                <span style={{fontSize:'0.8em',color:'var(--text3)'}}>{d.hint}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+
+/* ── SIDEBAR ────────────────────────────────── */
+function Sidebar({ page, setPage }) {
+  const { user } = useAuth();
+  const isManager = user?.role === 'manager' || user?.role === 'admin';
+  const isAdmin   = user?.role === 'admin';
+
+  const nav = [
+    { id:'dashboard', icon:'⊞', label:'Dashboard' },
+    { id:'profile',   icon:'◉', label:'My Profile' },
+    ...(isManager ? [{ id:'team', icon:'◈', label:'Team Directory' }] : []),
+    ...(isAdmin   ? [{ id:'admin', icon:'⚙', label:'Admin Panel' }]  : []),
+    { id:'accessibility', icon:'♿', label:'Accessibility' },
+  ];
+
+  return (
+    <nav className="sidebar" aria-label="Main navigation">
+      <div className="sidebar-header">Navigation</div>
+      {nav.map(n => (
+        <button key={n.id} className={`nav-item${page===n.id?' active':''}`}
+          onClick={()=>setPage(n.id)} aria-current={page===n.id?'page':undefined}>
+          <span className="nav-icon" aria-hidden="true">{n.icon}</span>
+          {n.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+/* ── TOPBAR ─────────────────────────────────── */
+function Topbar({ page, setPage }) {
+  const { user, logout } = useAuth();
+  return (
+    <header className="topbar" role="banner">
+      <span className="topbar-logo">◈ SESMag HR Portal</span>
+      <div className="topbar-actions">
+        {user && (
+          <>
+            <span style={{fontSize:'0.88em',color:'var(--text2)'}}>
+              Welcome, <strong style={{color:'var(--text)'}}>{user.first_name}</strong>
+            </span>
+            <RoleBadge role={user.role} />
+            <button className="btn btn-secondary btn-sm" onClick={logout}>Sign Out</button>
+          </>
+        )}
+      </div>
+    </header>
+  );
+}
+
+/* ── DASHBOARD ──────────────────────────────── */
+function Dashboard() {
+  const { user, users } = useAuth();
+  const isManager = user.role === 'manager' || user.role === 'admin';
+
+  const stats = [
+    { icon:'◉', label:'Employees', value: users.filter(u=>u.is_active).length, bg:'rgba(91,138,248,0.12)', color:'var(--accent)' },
+    { icon:'◈', label:'Departments', value: new Set(users.map(u=>u.department)).size, bg:'rgba(124,91,248,0.12)', color:'var(--accent2)' },
+    { icon:'♿', label:'A11y Users', value: users.filter(u=>u.reduce_motion||u.screen_reader_mode||u.font_size_pref==='xlarge').length, bg:'rgba(62,207,142,0.12)', color:'var(--green)' },
+    { icon:'⊞', label:'Managers', value: users.filter(u=>u.role==='manager').length, bg:'rgba(251,191,36,0.12)', color:'var(--yellow)' },
+  ];
+
+  return (
+    <section aria-labelledby="dashboard-title">
+      <h1 id="dashboard-title" className="page-title">Dashboard</h1>
+
+      {isManager && (
+        <>
+          <div className="grid-3" style={{marginBottom:'2rem'}} role="list" aria-label="Summary statistics">
+            {stats.map(s => (
+              <article key={s.label} className="stat-card" role="listitem">
+                <div className="stat-icon" style={{background:s.bg}} aria-hidden="true">
+                  <span style={{color:s.color}}>{s.icon}</span>
+                </div>
+                <div>
+                  <div className="stat-value">{s.value}</div>
+                  <div className="stat-label">{s.label}</div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </>
+      )}
+
+      <div className="grid-2">
+        <div className="card" aria-labelledby="welcome-card">
+          <h2 id="welcome-card" className="card-title">◉ Welcome, {user.first_name}!</h2>
+          <p style={{color:'var(--text2)',marginBottom:'1rem'}}>
+            You're signed in as <strong style={{color:'var(--text)'}}>{user.job_title || user.role}</strong>
+            {user.department ? ` in ${user.department}` : ''}.
+          </p>
+          <p style={{color:'var(--text2)',fontSize:'0.92em',lineHeight:'1.7'}}>
+            This portal is designed to be accessible for all SESMag personas — including DAV, Gary, Abi, and Tim.
+            Use the <strong style={{color:'var(--accent)'}}>Accessibility</strong> panel to customize your experience.
+          </p>
+        </div>
+
+        <div className="card" aria-labelledby="your-prefs">
+          <h2 id="your-prefs" className="card-title">⊞ Your Preferences</h2>
+          <dl style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.6rem'}}>
+            {[
+              ['Theme',         user.color_theme],
+              ['Font Size',     user.font_size_pref],
+              ['Reduce Motion', user.reduce_motion ? 'On' : 'Off'],
+              ['Screen Reader', user.screen_reader_mode ? 'On' : 'Off'],
+              ['Tech Comfort',  '⭐'.repeat(user.tech_comfort_level)],
+              ['Language',      user.preferred_language?.toUpperCase()],
+            ].map(([k,v])=>(
+              <div key={k}>
+                <dt style={{fontSize:'0.78em',color:'var(--text3)',textTransform:'uppercase',letterSpacing:'0.06em'}}>{k}</dt>
+                <dd style={{fontWeight:600,marginTop:'0.15rem'}}>{v}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="card" aria-labelledby="sesmag-info">
+          <h2 id="sesmag-info" className="card-title">◈ About SESMag</h2>
+          <p style={{color:'var(--text2)',fontSize:'0.92em',lineHeight:'1.75'}}>
+            SESMag (Self-Efficacy Survey Instrument for Marginalized Groups) studies how different user personas 
+            — defined by technology access, confidence, and socioeconomic factors — interact with software. 
+            This portal is built to serve all personas equally, with full WCAG 2.1 AA compliance.
+          </p>
+        </div>
+
+        <div className="card" aria-labelledby="dav-info">
+          <h2 id="dav-info" className="card-title">⚡ DAV Persona</h2>
+          <p style={{color:'var(--text2)',fontSize:'0.92em',lineHeight:'1.75'}}>
+            DAV represents users with <strong style={{color:'var(--text)'}}>lower technology access and confidence</strong>. 
+            This portal addresses DAV's needs through: adjustable font sizes, high-contrast mode, reduced motion, 
+            simple navigation labels, large tap targets, and screen reader compatibility.
+          </p>
+          <div style={{marginTop:'1rem',display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+            <Badge type="blue">Low tech-comfort</Badge>
+            <Badge type="green">High contrast</Badge>
+            <Badge type="purple">Large text</Badge>
+            <Badge type="yellow">Reduced motion</Badge>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── PROFILE PAGE ───────────────────────────── */
+function ProfilePage({ targetId }) {
+  const { user, users, updateUser } = useAuth();
+  const profile = targetId ? users.find(u=>u.id===targetId) : users.find(u=>u.id===user.id);
+  const [editing, setEditing] = useState(false);
+  const [form, setForm] = useState({});
+  const [saved, setSaved] = useState(false);
+
+  if (!profile) return <p>User not found.</p>;
+
+  const isSelf    = profile.id === user.id;
+  const canEdit   = isSelf || user.role === 'admin';
+
+  function startEdit() {
+    setForm({
+      first_name: profile.first_name, last_name: profile.last_name,
+      pronouns: profile.pronouns||'', phone: profile.phone||'',
+      bio: profile.bio||'', department: profile.department||'',
+      job_title: profile.job_title||'',
+    });
+    setEditing(true);
+  }
+
+  function save() {
+    updateUser(profile.id, form);
+    setEditing(false);
+    setSaved(true);
+    setTimeout(()=>setSaved(false), 3000);
+  }
+
+  const changes = MOCK_CHANGES.filter(c=>c.user_id===profile.id);
+
+  return (
+    <section aria-labelledby="profile-title">
+      <h1 id="profile-title" className="page-title">
+        {isSelf ? 'My Profile' : `${profile.first_name} ${profile.last_name}'s Profile`}
+      </h1>
+
+      {saved && <div className="success-msg" role="status">✔ Profile updated successfully.</div>}
+
+      <div className="card" style={{marginBottom:'1.5rem'}}>
+        <div className="profile-header">
+          <Avatar user={profile} size="avatar-lg" />
+          <div className="profile-meta">
+            <div className="profile-name">{profile.first_name} {profile.last_name}</div>
+            {profile.pronouns && <div style={{color:'var(--text3)',fontSize:'0.85em'}}>{profile.pronouns}</div>}
+            <div className="profile-role">{profile.job_title} · {profile.department}</div>
+            <div style={{marginTop:'0.5rem',display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+              <RoleBadge role={profile.role} />
+              {profile.is_active
+                ? <Badge type="green">Active</Badge>
+                : <Badge type="red">Inactive</Badge>}
+            </div>
+          </div>
+          {canEdit && (
+            <div className="profile-actions">
+              {editing
+                ? <>
+                    <button className="btn btn-primary btn-sm" onClick={save}>Save Changes</button>
+                    <button className="btn btn-secondary btn-sm" onClick={()=>setEditing(false)}>Cancel</button>
+                  </>
+                : <button className="btn btn-secondary btn-sm" onClick={startEdit}>Edit Profile</button>
+              }
+            </div>
+          )}
+        </div>
+
+        {editing ? (
+          <div className="grid-2" style={{marginTop:'1rem'}}>
+            {[['First Name','first_name'],['Last Name','last_name'],['Pronouns','pronouns'],
+              ['Phone','phone'],['Department','department'],['Job Title','job_title']].map(([label,key])=>(
+              <div className="form-group" key={key}>
+                <label className="form-label" htmlFor={`edit-${key}`}>{label}</label>
+                <input id={`edit-${key}`} className="form-input" value={form[key]||''}
+                  onChange={e=>setForm(p=>({...p,[key]:e.target.value}))} />
+              </div>
+            ))}
+            <div className="form-group" style={{gridColumn:'1/-1'}}>
+              <label className="form-label" htmlFor="edit-bio">Bio</label>
+              <textarea id="edit-bio" className="form-input" rows={3} value={form.bio||''}
+                onChange={e=>setForm(p=>({...p,bio:e.target.value}))} style={{resize:'vertical'}} />
+            </div>
+          </div>
+        ) : (
+          <div className="grid-2" style={{marginTop:'1rem'}}>
+            {[
+              ['Email',      profile.email],
+              ['Phone',      profile.phone||'—'],
+              ['Hire Date',  profile.hire_date],
+              ['Tech Comfort Level', '⭐'.repeat(profile.tech_comfort_level)],
+              ['Theme Preference', profile.color_theme],
+              ['Font Size',  profile.font_size_pref],
+            ].map(([k,v])=>(
+              <div key={k} style={{padding:'0.5rem 0',borderBottom:'1px solid var(--border)'}}>
+                <div style={{fontSize:'0.78em',color:'var(--text3)',textTransform:'uppercase',letterSpacing:'0.06em'}}>{k}</div>
+                <div style={{fontWeight:500,marginTop:'0.2rem'}}>{v}</div>
+              </div>
+            ))}
+            {profile.bio && (
+              <div style={{gridColumn:'1/-1',padding:'0.5rem 0',borderBottom:'1px solid var(--border)'}}>
+                <div style={{fontSize:'0.78em',color:'var(--text3)',textTransform:'uppercase',letterSpacing:'0.06em'}}>Bio</div>
+                <div style={{marginTop:'0.3rem',color:'var(--text2)',lineHeight:'1.7'}}>{profile.bio}</div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {(user.role === 'manager' || user.role === 'admin') && changes.length > 0 && (
+        <div className="card" aria-labelledby="changes-title">
+          <h2 id="changes-title" className="card-title">⟳ Profile Change Log</h2>
+          <div role="log" aria-live="polite" aria-label="Recent profile changes">
+            {changes.map(c=>(
+              <div key={c.id} className="change-entry">
+                <div style={{flex:1}}>
+                  <span className="change-field">{c.field_name}</span>
+                  <span className="change-arrow"> → </span>
+                  <span style={{color:'var(--green)'}}>{c.new_value}</span>
+                  <span style={{color:'var(--text3)'}}> (was: {c.old_value})</span>
+                  <div className="change-time">by {c.changed_by_name} · {new Date(c.changed_at).toLocaleString()}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}
+
+/* ── TEAM DIRECTORY ──────────────────────────── */
+function TeamPage({ setPage, setProfileTarget }) {
+  const { user, users } = useAuth();
+  const [search, setSearch] = useState('');
+  const [deptFilter, setDeptFilter] = useState('');
+
+  const depts = [...new Set(users.map(u=>u.department).filter(Boolean))].sort();
+
+  const filtered = users.filter(u => {
+    const name = `${u.first_name} ${u.last_name}`.toLowerCase();
+    const matchSearch = !search || name.includes(search.toLowerCase()) || u.email.includes(search.toLowerCase());
+    const matchDept   = !deptFilter || u.department === deptFilter;
+    return matchSearch && matchDept && u.is_active;
+  });
+
+  function viewProfile(id) {
+    setProfileTarget(id);
+    setPage('profile');
+  }
+
+  return (
+    <section aria-labelledby="team-title">
+      <h1 id="team-title" className="page-title">Team Directory</h1>
+      <div className="card">
+        <div style={{display:'flex',gap:'1rem',marginBottom:'1.5rem',flexWrap:'wrap'}}>
+          <div className="form-group" style={{flex:1,minWidth:'200px',marginBottom:0}}>
+            <label className="form-label" htmlFor="search-users">Search</label>
+            <input id="search-users" className="form-input" placeholder="Name or email…"
+              value={search} onChange={e=>setSearch(e.target.value)} type="search" />
+          </div>
+          <div className="form-group" style={{minWidth:'180px',marginBottom:0}}>
+            <label className="form-label" htmlFor="dept-filter">Department</label>
+            <select id="dept-filter" className="form-input form-select" value={deptFilter} onChange={e=>setDeptFilter(e.target.value)}>
+              <option value="">All Departments</option>
+              {depts.map(d=><option key={d} value={d}>{d}</option>)}
+            </select>
+          </div>
+        </div>
+
+        <div className="table-wrap" role="region" aria-label="Team directory table">
+          <table aria-label="Team members">
+            <thead>
+              <tr>
+                <th scope="col">Employee</th>
+                <th scope="col">Role</th>
+                <th scope="col">Department</th>
+                <th scope="col">Tech Comfort</th>
+                <th scope="col">A11y Needs</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map(u=>(
+                <tr key={u.id}>
+                  <td>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                      <Avatar user={u} />
+                      <div>
+                        <div style={{fontWeight:600}}>{u.first_name} {u.last_name}</div>
+                        <div style={{fontSize:'0.8em',color:'var(--text3)'}}>{u.email}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><RoleBadge role={u.role} /></td>
+                  <td style={{color:'var(--text2)'}}>{u.department}</td>
+                  <td aria-label={`Tech comfort: ${u.tech_comfort_level} out of 5`}>
+                    {'⭐'.repeat(u.tech_comfort_level)}
+                  </td>
+                  <td>
+                    <div style={{display:'flex',gap:'0.3rem',flexWrap:'wrap'}}>
+                      {u.font_size_pref==='xlarge'      && <Badge type="purple">XL Font</Badge>}
+                      {u.color_theme==='high-contrast'  && <Badge type="yellow">High Contrast</Badge>}
+                      {u.reduce_motion                  && <Badge type="blue">Low Motion</Badge>}
+                      {u.screen_reader_mode             && <Badge type="green">Screen Reader</Badge>}
+                    </div>
+                  </td>
+                  <td>
+                    <button className="btn btn-secondary btn-sm" onClick={()=>viewProfile(u.id)}
+                      aria-label={`View ${u.first_name} ${u.last_name}'s profile`}>
+                      View Profile
+                    </button>
+                  </td>
+                </tr>
+              ))}
+              {!filtered.length && (
+                <tr><td colSpan={6} style={{textAlign:'center',color:'var(--text3)',padding:'2rem'}}>No results found.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── ACCESSIBILITY SETTINGS ─────────────────── */
+function AccessibilityPage() {
+  const { user, updateUser } = useAuth();
+  const [prefs, setPrefs] = useState({
+    font_size_pref:      user.font_size_pref,
+    color_theme:         user.color_theme,
+    reduce_motion:       user.reduce_motion,
+    screen_reader_mode:  user.screen_reader_mode,
+    preferred_language:  user.preferred_language,
+    tech_comfort_level:  user.tech_comfort_level,
+  });
+  const [saved, setSaved] = useState(false);
+
+  function update(key, val) {
+    const next = {...prefs,[key]:val};
+    setPrefs(next);
+    applyA11yPrefs({...user,...next});
+  }
+
+  function save() {
+    updateUser(user.id, prefs);
+    setSaved(true);
+    setTimeout(()=>setSaved(false),3000);
+  }
+
+  const themes = [
+    { value:'light',         label:'Light',         desc:'Standard light background' },
+    { value:'dark',          label:'Dark',           desc:'Reduced eye strain at night' },
+    { value:'high-contrast', label:'High Contrast',  desc:'Maximum readability (WCAG AAA)' },
+    { value:'sepia',         label:'Sepia',          desc:'Warm tones, easier for long reading' },
+  ];
+
+  const fontSizes = [
+    { value:'small',  label:'Small (87.5%)' },
+    { value:'medium', label:'Medium (100%) — Default' },
+    { value:'large',  label:'Large (120%)' },
+    { value:'xlarge', label:'X-Large (145%)' },
+  ];
+
+  return (
+    <section aria-labelledby="a11y-title">
+      <h1 id="a11y-title" className="page-title">Accessibility Settings</h1>
+      {saved && <div className="success-msg" role="status">✔ Preferences saved.</div>}
+
+      <div className="grid-2">
+        {/* Color Theme */}
+        <div className="card" aria-labelledby="theme-heading">
+          <h2 id="theme-heading" className="card-title">◑ Color Theme</h2>
+          <fieldset style={{border:'none',padding:0}}>
+            <legend style={{display:'none'}}>Select color theme</legend>
+            <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+              {themes.map(t=>(
+                <label key={t.value} style={{display:'flex',alignItems:'center',gap:'0.75rem',cursor:'pointer',padding:'0.7rem',borderRadius:'8px',border:`1.5px solid ${prefs.color_theme===t.value?'var(--accent)':'var(--border)'}`,background:prefs.color_theme===t.value?'rgba(91,138,248,0.08)':'transparent',transition:'all 0.15s'}}>
+                  <input type="radio" name="theme" value={t.value} checked={prefs.color_theme===t.value} onChange={()=>update('color_theme',t.value)} style={{accentColor:'var(--accent)'}} />
+                  <div>
+                    <div style={{fontWeight:600}}>{t.label}</div>
+                    <div style={{fontSize:'0.8em',color:'var(--text3)'}}>{t.desc}</div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        {/* Font Size */}
+        <div className="card" aria-labelledby="fontsize-heading">
+          <h2 id="fontsize-heading" className="card-title">Aa Font Size</h2>
+          <fieldset style={{border:'none',padding:0}}>
+            <legend style={{display:'none'}}>Select font size</legend>
+            <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+              {fontSizes.map(f=>(
+                <label key={f.value} style={{display:'flex',alignItems:'center',gap:'0.75rem',cursor:'pointer',padding:'0.7rem',borderRadius:'8px',border:`1.5px solid ${prefs.font_size_pref===f.value?'var(--accent)':'var(--border)'}`,background:prefs.font_size_pref===f.value?'rgba(91,138,248,0.08)':'transparent',transition:'all 0.15s'}}>
+                  <input type="radio" name="fontsize" value={f.value} checked={prefs.font_size_pref===f.value} onChange={()=>update('font_size_pref',f.value)} style={{accentColor:'var(--accent)'}} />
+                  <span style={{fontWeight:500}}>{f.label}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+
+        {/* Motion & Screen Reader toggles */}
+        <div className="card" aria-labelledby="motion-heading">
+          <h2 id="motion-heading" className="card-title">⚡ Motion & Interaction</h2>
+          <div className="a11y-panel">
+            <div className="a11y-row">
+              <div>
+                <div className="a11y-label">Reduce Motion</div>
+                <div className="a11y-desc">Disables animations and transitions</div>
+              </div>
+              <Toggle id="reduce-motion" checked={prefs.reduce_motion}
+                onChange={v=>update('reduce_motion',v)} label="Toggle reduce motion" />
+            </div>
+            <div className="a11y-row">
+              <div>
+                <div className="a11y-label">Screen Reader Mode</div>
+                <div className="a11y-desc">Optimizes layout for assistive technology</div>
+              </div>
+              <Toggle id="screen-reader" checked={prefs.screen_reader_mode}
+                onChange={v=>update('screen_reader_mode',v)} label="Toggle screen reader mode" />
+            </div>
+          </div>
+        </div>
+
+        {/* Tech Comfort */}
+        <div className="card" aria-labelledby="comfort-heading">
+          <h2 id="comfort-heading" className="card-title">⭐ Tech Comfort Level</h2>
+          <p style={{color:'var(--text2)',fontSize:'0.9em',marginBottom:'1rem'}}>
+            Helps us tailor help text and interface complexity to your experience level.
+          </p>
+          <fieldset style={{border:'none',padding:0}}>
+            <legend style={{display:'none'}}>Select technology comfort level (1-5)</legend>
+            <div style={{display:'flex',gap:'0.5rem',flexWrap:'wrap'}}>
+              {[1,2,3,4,5].map(n=>(
+                <label key={n} style={{cursor:'pointer'}}>
+                  <input type="radio" name="comfort" value={n} checked={prefs.tech_comfort_level===n} onChange={()=>update('tech_comfort_level',n)} style={{display:'none'}} />
+                  <div style={{width:'48px',height:'48px',borderRadius:'10px',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2em',border:`2px solid ${prefs.tech_comfort_level>=n?'var(--accent)':'var(--border)'}`,background:prefs.tech_comfort_level>=n?'rgba(91,138,248,0.15)':'transparent',transition:'all 0.15s',fontWeight:700}} aria-label={`Comfort level ${n}`}>
+                    {n}
+                  </div>
+                </label>
+              ))}
+            </div>
+            <div style={{marginTop:'0.75rem',color:'var(--text3)',fontSize:'0.85em'}}>
+              {['','Beginner — I rarely use technology','Novice — Basic tasks only','Intermediate — Comfortable with most apps','Advanced — Power user','Expert — Developer / IT professional'][prefs.tech_comfort_level]}
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <button className="btn btn-primary" style={{marginTop:'1.5rem'}} onClick={save}>
+        Save Accessibility Preferences
+      </button>
+    </section>
+  );
+}
+
+/* ── ADMIN PANEL ─────────────────────────────── */
+function AdminPanel({ setPage, setProfileTarget }) {
+  const { users, updateUser } = useAuth();
+  const [msg, setMsg] = useState('');
+
+  function toggleActive(u) {
+    updateUser(u.id, { is_active: !u.is_active });
+    setMsg(`${u.first_name} ${u.last_name} ${u.is_active ? 'deactivated' : 'reactivated'}.`);
+    setTimeout(()=>setMsg(''),3000);
+  }
+
+  function viewProfile(id) {
+    setProfileTarget(id);
+    setPage('profile');
+  }
+
+  return (
+    <section aria-labelledby="admin-title">
+      <h1 id="admin-title" className="page-title">Admin Panel</h1>
+      {msg && <div className="success-msg" role="status">{msg}</div>}
+      <div className="card">
+        <h2 className="card-title">⚙ All Users</h2>
+        <div className="table-wrap">
+          <table aria-label="All system users">
+            <thead>
+              <tr>
+                <th scope="col">User</th>
+                <th scope="col">Role</th>
+                <th scope="col">Department</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(u=>(
+                <tr key={u.id}>
+                  <td>
+                    <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                      <Avatar user={u} />
+                      <div>
+                        <div style={{fontWeight:600}}>{u.first_name} {u.last_name}</div>
+                        <div style={{fontSize:'0.8em',color:'var(--text3)',fontFamily:'var(--mono)'}}>{u.username}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><RoleBadge role={u.role} /></td>
+                  <td style={{color:'var(--text2)'}}>{u.department||'—'}</td>
+                  <td>{u.is_active ? <Badge type="green">Active</Badge> : <Badge type="red">Inactive</Badge>}</td>
+                  <td>
+                    <div style={{display:'flex',gap:'0.5rem'}}>
+                      <button className="btn btn-secondary btn-sm" onClick={()=>viewProfile(u.id)}
+                        aria-label={`View ${u.first_name}'s profile`}>View</button>
+                      <button className={`btn btn-sm ${u.is_active?'btn-danger':'btn-primary'}`}
+                        onClick={()=>toggleActive(u)} aria-label={`${u.is_active?'Deactivate':'Reactivate'} ${u.first_name}`}>
+                        {u.is_active ? 'Deactivate' : 'Reactivate'}
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ══════════════════════════════════════════════
+   APP ROOT
+   ══════════════════════════════════════════════ */
+function App() {
+  const { user } = useAuth();
+  const [page,          setPage]          = useState('dashboard');
+  const [profileTarget, setProfileTarget] = useState(null);
+
+  if (!user) return <LoginPage />;
+
+  function navigate(p, target=null) {
+    setPage(p);
+    setProfileTarget(target);
+  }
+
+  const renderPage = () => {
+    switch(page) {
+      case 'dashboard':    return <Dashboard />;
+      case 'profile':      return <ProfilePage targetId={profileTarget} />;
+      case 'team':         return <TeamPage setPage={setPage} setProfileTarget={setProfileTarget} />;
+      case 'admin':        return <AdminPanel setPage={setPage} setProfileTarget={setProfileTarget} />;
+      case 'accessibility':return <AccessibilityPage />;
+      default:             return <Dashboard />;
+    }
+  };
+
+  return (
+    <div id="app-root">
+      <Topbar page={page} setPage={setPage} />
+      <div className="app-shell">
+        <Sidebar page={page} setPage={navigate} />
+        <main className="main-content" id="main-content" tabIndex={-1}>
+          {renderPage()}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+function Root() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Root />);
+</script>
+</body>
+</html>
